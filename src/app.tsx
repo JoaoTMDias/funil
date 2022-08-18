@@ -1,13 +1,19 @@
 import { initializeIcons } from "@fluentui/font-icons-mdl2";
 import { MemoryRouter as Router, Route, Routes } from "react-router-dom";
 import "./assets/styles/index.scss";
+import { FileUploader, UploadForm } from "./renderer";
 
 initializeIcons();
 
 function Funil(): JSX.Element {
   return (
     <div id="funil">
-      <h1>Funil</h1>
+      <header>
+        <h1>Funil</h1>
+      </header>
+      <main>
+        <UploadForm />
+      </main>
     </div>
   );
 }

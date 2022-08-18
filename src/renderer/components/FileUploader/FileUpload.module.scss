@@ -1,0 +1,38 @@
+.container {
+  margin: 0;
+  padding: 0;
+  border: 2px var(--color-foreground) dashed;
+  border-radius: 0.5rem;
+  position: relative;
+  height: clamp(30rem, 50vh, 37.5rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.legend {
+  margin: auto;
+  z-index: 1;
+}
+
+.elements {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.label {
+  width: 100%;
+  height: 100%;
+}
+
+.label,
+.input {
+  opacity: 0;
+}

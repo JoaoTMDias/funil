@@ -1,13 +1,13 @@
-@import './reset';
-@import './layout';
+@import "./reset";
+@import "./layout";
 
 :root {
-  --color-background: black;
-  --color-foreground: white;
-  --font-family: 'Segoe UI Variable Static Display', 'Segoe UI',
-    'Segoe UI Web (West European)', 'Segoe UI', -apple-system,
-    BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
-    'Helvetica Neue', sans-serif;
+  --color-background: white;
+  --color-foreground: black;
+  --font-family: "Segoe UI Variable Static Display", "Segoe UI",
+    "Segoe UI Web (West European)", "Segoe UI", -apple-system,
+    BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
+    "Helvetica Neue", sans-serif;
 }
 
 html,
