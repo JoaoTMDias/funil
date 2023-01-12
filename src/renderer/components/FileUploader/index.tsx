@@ -1,5 +1,5 @@
 import { Label } from "@fluentui/react/lib/Label";
-import { useRef, useId } from "react";
+import { useRef, useId, useCallback } from "react";
 import { TextField } from "@fluentui/react/lib/TextField";
 import type { DropTargetMonitor } from "react-dnd";
 import { useDrop } from "react-dnd";
@@ -7,7 +7,12 @@ import { NativeTypes } from "react-dnd-html5-backend";
 import styles from "./FileUpload.module.scss";
 
 interface FileUploaderProps {
-  onDrop: (item: { files: any[] }) => void;
+  onSelectFiles?: (files: File[]) => void;
+}
+
+interface DraggedFile {
+  files: File[];
+  items: any;
 }
 
 function FileUploader(props: FileUploaderProps): JSX.Element {
@@ -18,20 +23,20 @@ function FileUploader(props: FileUploaderProps): JSX.Element {
   const [{ canDrop, isOver }, dropRef] = useDrop(
     () => ({
       accept: [NativeTypes.FILE],
-      drop(item: { files: any[] }) {
-        if (props.onDrop) {
-          props.onDrop(item);
+      drop(item: DraggedFile) {
+        if (props.onSelectFiles) {
+          props.onSelectFiles(item.files);
         }
       },
-      canDrop(item: any) {
+      canDrop(item: DraggedFile) {
         console.log("canDrop", item.files, item.items);
         return true;
       },
-      hover(item: any) {
+      hover(item: DraggedFile) {
         console.log("hover", item.files, item.items);
       },
       collect: (monitor: DropTargetMonitor) => {
-        const item = monitor.getItem() as any;
+        const item = monitor.getItem() as DraggedFile;
         if (item) {
           console.log("collect", item.files, item.items);
         }
@@ -45,13 +50,33 @@ function FileUploader(props: FileUploaderProps): JSX.Element {
     [props]
   );
 
+  /**
+   * Handles the click to select one or multiple files.
+   * Calls the `onDrop` callback with an array of selected files.
+   */
+  const handleOnChangeInput = useCallback(
+    (event: React.FormEvent<HTMLInputElement>) => {
+      const { files } = event.currentTarget;
+
+      if (files && files.length > 0 && props.onSelectFiles) {
+        const fileData = Array.from(files);
+
+        props.onSelectFiles(fileData);
+      }
+    },
+    []
+  );
+
   const isActive = canDrop && isOver;
   const legend = isActive ? "Release to drop" : "Drag and Drop or Browse files";
 
   return (
-    <fieldset aria-labelledby={legendId.current} className={styles.container}>
+    <fieldset
+      ref={dropRef}
+      aria-labelledby={legendId.current}
+      className={styles.container}
+    >
       <span
-        ref={dropRef}
         id={legendId.current}
         className={styles.legend}
         data-testid="funil-upload-title"
@@ -70,6 +95,7 @@ function FileUploader(props: FileUploaderProps): JSX.Element {
           className={styles.input}
           id={id}
           componentRef={inputRef}
+          onChange={handleOnChangeInput}
           type="file"
           multiple
           data-testid="funil-upload-input"
